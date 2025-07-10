@@ -18,7 +18,7 @@
     "@supabase/supabase-js": "^2.50.3",
     "@tanstack/react-query": "^5.81.5",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.23.0",
+    "framer-motion": "^12.23.3",
     "next": "15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
