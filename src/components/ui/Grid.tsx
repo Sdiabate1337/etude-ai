@@ -27,15 +27,15 @@ export function Grid({
   };
 
   const getColsClass = () => {
-    let classes = 'grid';
+    const classes = ['grid'];
     
-    if (cols.default) classes += ` grid-cols-${cols.default}`;
-    if (cols.sm) classes += ` sm:grid-cols-${cols.sm}`;
-    if (cols.md) classes += ` md:grid-cols-${cols.md}`;
-    if (cols.lg) classes += ` lg:grid-cols-${cols.lg}`;
-    if (cols.xl) classes += ` xl:grid-cols-${cols.xl}`;
+    if (cols.default) classes.push(`grid-cols-${cols.default}`);
+    if (cols.sm) classes.push(`sm:grid-cols-${cols.sm}`);
+    if (cols.md) classes.push(`md:grid-cols-${cols.md}`);
+    if (cols.lg) classes.push(`lg:grid-cols-${cols.lg}`);
+    if (cols.xl) classes.push(`xl:grid-cols-${cols.xl}`);
     
-    return classes;
+    return classes.join(' ');
   };
 
   return (

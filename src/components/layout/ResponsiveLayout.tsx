@@ -1,4 +1,8 @@
+"use client"
+
 import { cn } from '@/lib/utils';
+import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 interface ResponsiveLayoutProps {
   children: React.ReactNode;
@@ -18,19 +22,29 @@ export function ResponsiveLayout({ children, className }: ResponsiveLayoutProps)
   );
 }
 
-export function ResponsiveHeader({ children, className }: ResponsiveLayoutProps) {
+export function ResponsiveHeader({ children }: { children: React.ReactNode }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 32);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <header className={cn(
-      'w-full sticky top-0 z-50',
-      'bg-white/95 backdrop-blur-md',
-      'border-b border-gray-200',
-      'transition-all duration-200',
-      className
-    )}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 sm:py-6">
-          {children}
-        </div>
+    <header
+      className={clsx(
+        'fixed z-50 top-0 left-0 right-0 w-full transition-all duration-300',
+        scrolled
+          ? 'bg-white/90 backdrop-blur shadow-sm border-b border-gray-100'
+          : 'bg-transparent'
+      )}
+      style={{ WebkitBackdropFilter: scrolled ? 'blur(12px)' : undefined, backdropFilter: scrolled ? 'blur(12px)' : undefined }}
+    >
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3 min-h-[64px]">
+        {children}
       </div>
     </header>
   );

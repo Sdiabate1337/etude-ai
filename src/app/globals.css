@@ -13,6 +13,11 @@
   }
 }
 
+/* Ajoute à la fin de ton globals.css */
+html {
+  scroll-padding-top: 72px;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-gradient-to-r from-etude-orange-500 to-etude-green-500 text-white px-6 py-3 rounded-full font-semibold hover:from-etude-orange-600 hover:to-etude-green-600 transition-all duration-200 shadow-lg hover:shadow-xl;
@@ -34,3 +39,71 @@
     @apply bg-gradient-to-r from-etude-orange-500 to-etude-green-500 bg-clip-text text-transparent;
   }
 }
+
+/* Ajouter ces animations à votre fichier existant */
+
+@keyframes animate-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes animate-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: animate-slide-in-left 0.8s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: animate-slide-in-right 0.8s ease-out;
+}
+
+        @keyframes slide-in-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: translateX(0); } }
+        .animate-slide-in-left { animation: slide-in-left 0.9s cubic-bezier(.4,0,.2,1) both; }
+        @keyframes fade-in-down { from { opacity: 0; transform: translateY(-16px);} to { opacity: 1; transform: translateY(0);} }
+        .animate-fade-in-down { animation: fade-in-down 0.8s cubic-bezier(.4,0,.2,1) both;}
+
+         @keyframes slide-in-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: translateX(0); } }
+        .animate-slide-in-left { animation: slide-in-left 0.9s cubic-bezier(.4,0,.2,1) both; }
+        @keyframes fade-in-down { from { opacity: 0; transform: translateY(-16px);} to { opacity: 1; transform: translateY(0);} }
+        .animate-fade-in-down { animation: fade-in-down 0.8s cubic-bezier(.4,0,.2,1) both;}
+        @keyframes float {
+          0%,100% { transform: translateY(0);}
+          50% { transform: translateY(30px);}
+        }
+        .animate-float { animation: float 10s ease-in-out infinite;}
+        @keyframes float-slow {
+          0%,100% { transform: translateY(0);}
+          50% { transform: translateY(-26px);}
+        }
+        .animate-float-slow { animation: float-slow 16s ease-in-out infinite;}
+
+
+         @keyframes slide-in-left { from { opacity: 0; transform: translateX(-48px); } to { opacity: 1; transform: translateX(0); } }
+        .animate-slide-in-left { animation: slide-in-left 0.9s cubic-bezier(.4,0,.2,1) both; }
+        @keyframes fade-in-down { from { opacity: 0; transform: translateY(-16px);} to { opacity: 1; transform: translateY(0);} }
+        .animate-fade-in-down { animation: fade-in-down 0.8s cubic-bezier(.4,0,.2,1) both;}
+        @keyframes float {
+          0%,100% { transform: translateY(0);}
+          50% { transform: translateY(30px);}
+        }
+        .animate-float { animation: float 10s ease-in-out infinite;}
+        @keyframes float-slow {
+          0%,100% { transform: translateY(0);}
+          50% { transform: translateY(-26px);}
+        }
+        .animate-float-slow { animation: float-slow 16s ease-in-out infinite;}
