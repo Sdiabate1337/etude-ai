@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils';
 import { Container } from './Container';
+import React from 'react';
 
-interface SectionProps {
+interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
   className?: string;
   containerSize?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -14,7 +15,8 @@ export function Section({
   className, 
   containerSize = 'xl',
   padding = 'lg',
-  background = 'transparent'
+  background = 'transparent',
+  ...rest
 }: SectionProps) {
   const paddingClasses = {
     sm: 'py-8 sm:py-12',
@@ -31,11 +33,14 @@ export function Section({
   };
 
   return (
-    <section className={cn(
-      paddingClasses[padding],
-      backgroundClasses[background],
-      className
-    )}>
+    <section
+      className={cn(
+        paddingClasses[padding],
+        backgroundClasses[background],
+        className
+      )}
+      {...rest}
+    >
       <Container size={containerSize}>
         {children}
       </Container>
