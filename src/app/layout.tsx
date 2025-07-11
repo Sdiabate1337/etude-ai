@@ -17,20 +17,26 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: '∑tude.ai - Transforme tes cours en projets concrets',
-  description: 'Plateforme d\'apprentissage panafricaine avec mentor IA 24/7 et communauté d\'étudiants collaboratifs',
-  keywords: ['éducation', 'Afrique', 'IA', 'apprentissage', 'étudiants', 'projets', 'collaboration'],
+  description: 'Tu veux appliquer enfin ce que tu apprends ? ∑tude.ai est la 1re plateforme d’apprentissage pratique en Afrique, avec mentor IA 24/7, projets réels et communauté collaborative.',
+  keywords: [
+  'plateforme éducative Afrique',
+  'projets étudiants concrets',
+  'mentor IA 24/7',
+  'apprentissage pratique pour étudiants africains',
+  'portfolio étudiant Afrique',
+],
   authors: [{ name: 'Sdiabate1337' }],
   openGraph: {
-    title: '∑tude.ai - L\'avenir de l\'éducation africaine',
+    title: '∑tude.ai - Transforme tes cours en projets concrets',
     description: 'Transforme tes cours théoriques en projets concrets avec un mentor IA et une communauté panafricaine',
-    url: 'https://etude-ai.com',
+    url: 'https://etude-ai.vercel.app/',
     siteName: '∑tude.ai',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: '∑tude.ai - Éducation africaine révolutionnaire',
+        alt: '∑tude.ai - Transforme tes cours en projets concrets',
       },
     ],
     locale: 'fr_FR',
