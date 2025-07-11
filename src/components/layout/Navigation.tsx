@@ -17,7 +17,8 @@ export function Navigation({ className }: NavigationProps) {
   const navItems = [
     { href: '#experience', label: 'L\'Expérience', description: 'Ce que tu vas vivre' },
     { href: '#beta-advantages', label: 'Avantages Bêta', description: 'Exclusivité et urgence' },
-    { href: '#interface-preview', label: 'Aperçu', description: 'Interface de la plateforme' }
+    { href: '#interface-preview', label: 'Aperçu', description: 'Interface de la plateforme' },
+    { href: '/auth/signin', label: 'Se connecter', description: 'Accès développeur' }
   ];
 
   return (

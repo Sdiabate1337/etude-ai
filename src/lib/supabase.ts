@@ -1,28 +1,44 @@
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/types/supabase';
+import { createBrowserClient, createServerClient } from '@supabase/ssr'
+import { NextRequest, NextResponse } from 'next/server'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+// Client pour le browser
+export const createClient = () =>
+  createBrowserClient(
+    supabaseUrl!,
+    supabaseKey!,
+  )
 
-// Client pour les interactions côté client
-export const createClientComponentClient = () => {
-  return createClient<Database>(supabaseUrl, supabaseAnonKey);
-};
+// Client pour le middleware Next.js
+export const createMiddlewareClient = (request: NextRequest) => {
+  let supabaseResponse = NextResponse.next({
+    request,
+  })
 
-// Client pour les Server Components
-export const createServerComponentClient = () => {
-  return createClient<Database>(supabaseUrl, supabaseAnonKey);
-};
+  const supabase = createServerClient(
+    supabaseUrl!,
+    supabaseKey!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value)
+          })
+          supabaseResponse = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
 
-// Types helpers
-export type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
-export type Project = Database['public']['Tables']['projects']['Row'];
-export type UserProgress = Database['public']['Tables']['user_progress']['Row'];
-export type ChatSession = Database['public']['Tables']['chat_sessions']['Row'];
-export type SocialConnection = Database['public']['Tables']['social_connections']['Row'];
-export type Achievement = Database['public']['Tables']['achievements']['Row'];
-export type UserAchievement = Database['public']['Tables']['user_achievements']['Row'];
-export type MazeNode = Database['public']['Tables']['maze_nodes']['Row'];
-export type AIInteraction = Database['public']['Tables']['ai_interactions']['Row'];
+  return { supabase, supabaseResponse }
+}
