@@ -103,7 +103,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center text-gray-600 text-sm">
                 <EnvelopeIcon className="w-4 h-4 mr-2 text-blue-600" />
-                hello@etude.ai
+                diabatesekou1337@gmail.com
               </li>
               <li className="flex items-center text-gray-600 text-sm">
                 <MapPinIcon className="w-4 h-4 mr-2 text-green-600" />
@@ -130,7 +130,7 @@ export function Footer() {
                   ))}
                 </div>
                 <Typography className="text-sm font-bold text-gray-900 ml-2">
-                  +23 autres
+                  +50 autres
                 </Typography>
               </div>
             </div>
