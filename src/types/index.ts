@@ -1,53 +1,27 @@
-import { ChatSession, Project, UserProfile } from '@/lib/supabase';
+// Types simplifiés pour Google Auth + Dashboard MVP
+// ∑tude.ai
 
-// Importer les types depuis supabase
-export type {
-  UserProfile,
-  Project,
-  UserProgress,
-  ChatSession,
-  SocialConnection,
-  Achievement,
-  UserAchievement,
-  MazeNode,
-  AIInteraction,
-} from '@/lib/supabase';
-
-// Types supplémentaires pour l'interface
-export interface ChatMessage {
+// Type de base pour le profil utilisateur
+export interface UserProfile {
   id: string;
-  sender_id: string;
-  sender_name: string;
-  content: string;
-  message_type: 'text' | 'code' | 'file' | 'system';
-  timestamp: string;
-  metadata?: Record<string, any>;
+  full_name: string;
+  email: string;
+  avatar_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Types pour les formulaires
+export interface SignInFormData {
+  email: string;
+  password: string;
 }
 
 // Types pour les réponses API
-export interface APIResponse<T> {
+export interface APIResponse<T = any> {
   data?: T;
   error?: string;
   success: boolean;
-}
-
-// Types pour l'IA
-export interface AIResponse {
-  content: string;
-  suggestions?: string[];
-  actions?: string[];
-  confidence: number;
-  context?: Record<string, any>;
-}
-
-export interface MCPToolResult {
-  content: Array<{
-    type: 'text' | 'image' | 'resource';
-    text?: string;
-    data?: string;
-    uri?: string;
-  }>;
-  isError?: boolean;
 }
 
 // Types pour les props des composants
@@ -56,29 +30,13 @@ export interface ComponentProps {
   className?: string;
 }
 
-// Types pour les formulaires
-export interface SignUpFormData {
-  email: string;
-  password: string;
-  full_name: string;
-  country: string;
-  university?: string;
-  domain: 'computer_science' | 'economics' | 'law';
-}
-
-export interface SignInFormData {
-  email: string;
-  password: string;
-}
-
 // Types pour les états de l'application
 export interface AppState {
   currentUser: UserProfile | null;
-  currentProject: Project | null;
-  activeChatSession: ChatSession | null;
-  notifications: Notification[];
+  isLoading: boolean;
 }
 
+// Types pour les notifications
 export interface Notification {
   id: string;
   type: 'success' | 'error' | 'info' | 'warning';

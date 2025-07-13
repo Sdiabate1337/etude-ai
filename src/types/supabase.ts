@@ -1,4 +1,4 @@
-// Types Supabase générés automatiquement
+// Types Supabase pour MVP avec Smart Onboarding
 export interface Database {
   public: {
     Tables: {
@@ -6,54 +6,31 @@ export interface Database {
         Row: {
           id: string;
           full_name: string;
+          email: string;
           avatar_url: string | null;
-          country: string;
-          university: string | null;
-          domain: 'computer_science' | 'economics' | 'law';
-          skill_level: number;
-          xp_points: number;
-          current_level: number;
-          current_streak: number;
-          longest_streak: number;
-          last_activity_date: string;
+          field_of_study: string | null;
+          academic_level: string | null;
           onboarding_completed: boolean;
-          preferences: Record<string, any>;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id: string;
           full_name: string;
+          email: string;
           avatar_url?: string | null;
-          country: string;
-          university?: string | null;
-          domain: 'computer_science' | 'economics' | 'law';
-          skill_level?: number;
-          xp_points?: number;
-          current_level?: number;
-          current_streak?: number;
-          longest_streak?: number;
-          last_activity_date?: string;
+          field_of_study?: string | null;
+          academic_level?: string | null;
           onboarding_completed?: boolean;
-          preferences?: Record<string, any>;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
           full_name?: string;
+          email?: string;
           avatar_url?: string | null;
-          country?: string;
-          university?: string | null;
-          domain?: 'computer_science' | 'economics' | 'law';
-          skill_level?: number;
-          xp_points?: number;
-          current_level?: number;
-          current_streak?: number;
-          longest_streak?: number;
-          last_activity_date?: string;
           onboarding_completed?: boolean;
-          preferences?: Record<string, any>;
           created_at?: string;
           updated_at?: string;
         };
@@ -382,14 +359,41 @@ export interface Database {
       [_ in never]: never;
     };
     Enums: {
-      user_domain: 'computer_science' | 'economics' | 'law';
-      project_type: 'code' | 'document' | 'analysis' | 'presentation';
-      project_status: 'not_started' | 'in_progress' | 'completed' | 'reviewed';
-      difficulty_level: 'beginner' | 'intermediate' | 'advanced';
-      mission_type: 'solo' | 'collaborative' | 'mentoring';
+      [_ in never]: never;
     };
     CompositeTypes: {
       [_ in never]: never;
     };
   };
+}
+
+// Types d'aide pour l'utilisation
+export type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
+export type UserProfileInsert = Database['public']['Tables']['user_profiles']['Insert'];
+export type UserProfileUpdate = Database['public']['Tables']['user_profiles']['Update'];
+
+// Types pour l'onboarding
+export type FieldOfStudy = 
+  | 'computer_science'
+  | 'economics' 
+  | 'law'
+  | 'medicine'
+  | 'humanities'
+  | 'engineering'
+  | 'business'
+  | 'sciences'
+  | 'other';
+
+export type AcademicLevel = 
+  | 'l1' // Year 1 Bachelor
+  | 'l2' // Year 2 Bachelor  
+  | 'l3' // Year 3 Bachelor
+  | 'm1' // Master's 1
+  | 'm2' // Master's 2
+  | 'engineering' // Engineering School
+  | 'other';
+
+export interface OnboardingData {
+  field_of_study: FieldOfStudy;
+  academic_level: AcademicLevel;
 }

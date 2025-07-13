@@ -66,11 +66,17 @@ export default function HomePage() {
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-3">
             <Button 
-              variant="ghost" 
               size="sm" 
               className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
             >
               <Link href="/demo">Domaines</Link>
+            </Button>
+            
+            <Button 
+              size="sm" 
+              className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200 font-medium"
+            >
+              <Link href="/login">Connexion</Link>
             </Button>
             
             <Button 
