@@ -1,7 +1,7 @@
-import OnboardingFlow from '@/components/onboarding/OnboardingFlow'
+import ProgressiveOnboardingWizard from '@/components/onboarding/ProgressiveOnboardingWizard'
 
 export default function OnboardingPage() {
-  return <OnboardingFlow />
+  return <ProgressiveOnboardingWizard />
 }
 
 export const metadata = {

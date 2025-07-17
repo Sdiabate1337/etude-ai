@@ -5,21 +5,16 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout'
 export default async function DashboardPage() {
   const supabase = createClient()
   
-  // Vérifier l'authentification
-  const { data: { session } } = await supabase.auth.getSession()
-  
-  if (!session) {
-    redirect('/auth/signin')
-  }
-  
-  // Récupérer le profil utilisateur
+  // Récupérer le profil utilisateur (middleware already handles auth and onboarding checks)
+  const { data: { user } } = await supabase.auth.getUser()
   const { data: profile } = await supabase
-    .from('profiles')
+    .from('user_profiles')
     .select('*')
-    .eq('id', session.user.id)
+    .eq('id', user.id)
     .single()
   
-  if (!profile?.onboarding_completed) {
+  // If profile is null, redirect to onboarding (this should never happen due to middleware)
+  if (!profile) {
     redirect('/onboarding')
   }
   
@@ -31,7 +26,7 @@ export default async function DashboardPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-6">
               <h1 className="text-3xl font-bold text-slate-900">
-                Salut {profile.display_name || profile.email?.split('@')[0]} ! 👋
+                Salut {profile.full_name || profile.email?.split('@')[0]} ! 👋
               </h1>
               <p className="mt-2 text-slate-600">
                 Prêt à transformer tes connaissances en projets concrets ?
@@ -51,7 +46,7 @@ export default async function DashboardPage() {
                   🎯 Ton Parcours Personnalisé
                 </h2>
                 <p className="text-slate-600 mb-4">
-                  Basé sur tes préférences : <span className="font-medium">{profile.learning_domains?.join(', ')}</span>
+                  Basé sur tes préférences : <span className="font-medium">{profile.learning_domains?.join(', ') || 'Non défini'}</span>
                 </p>
                 <button className="bg-gradient-to-r from-blue-600 to-green-600 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                   🚀 Générer mon Premier Projet
@@ -96,7 +91,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-slate-600">Niveau Actuel</p>
-                  <p className="text-2xl font-bold text-slate-900 capitalize">{profile.level}</p>
+                  <p className="text-2xl font-bold text-slate-900 capitalize">{profile.level || 'Non défini'}</p>
                 </div>
               </div>
             </div>

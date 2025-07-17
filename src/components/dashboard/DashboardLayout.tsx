@@ -16,10 +16,18 @@ import {
 interface Profile {
   id: string
   email: string
-  display_name: string | null
-  level: string
-  learning_domains: string[]
+  full_name: string | null
+  avatar_url: string | null
+  university: string | null
+  country: string | null
+  whatsapp_number: string | null
+  field_of_study: string | null
+  academic_level: string | null
+  level: string | null
+  learning_domains: string[] | null
   onboarding_completed: boolean
+  created_at: string
+  updated_at: string
 }
 
 interface DashboardLayoutProps {
@@ -140,11 +148,11 @@ export default function DashboardLayout({ children, profile }: DashboardLayoutPr
               >
                 <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-600 to-green-600 flex items-center justify-center">
                   <span className="text-white text-sm font-medium">
-                    {(profile.display_name || profile.email)?.charAt(0).toUpperCase()}
+                    {(profile.full_name || profile.email)?.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <span className="ml-2 text-sm font-medium text-slate-700 hidden sm:block">
-                  {profile.display_name || profile.email?.split('@')[0]}
+                  {profile.full_name || profile.email?.split('@')[0]}
                 </span>
               </button>
 

@@ -7,16 +7,15 @@ import type { User, Session } from '@supabase/supabase-js'
 interface Profile {
   id: string
   email: string
-  display_name: string | null
+  full_name: string | null
+  avatar_url: string | null
+  university: string | null
+  country: string | null
+  whatsapp_number: string | null
+  field_of_study: string | null
+  academic_level: string | null
   level: string | null
   learning_domains: string[] | null
-  learning_goals: string[] | null
-  preferred_format: string | null
-  time_available: string | null
-  learning_style: string | null
-  motivation: string | null
-  challenges: string[] | null
-  expectations: string | null
   onboarding_completed: boolean
   created_at: string
   updated_at: string
@@ -81,13 +80,18 @@ export function useAuth() {
 
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('*')
         .eq('id', userId)
         .single()
 
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching profile:', error)
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // No profile found - create one for new user
+          await createProfile(userId)
+        } else {
+          console.error('Error fetching profile:', error)
+        }
       } else {
         setProfile(data)
       }
@@ -96,12 +100,93 @@ export function useAuth() {
     }
   }
 
+  const createProfile = async (userId: string) => {
+    console.log('Creating profile for user:', userId)
+    
+    try {
+      const { data: userData } = await supabase.auth.getUser()
+      const user = userData.user
+      
+      if (!user) {
+        console.error('No user found when creating profile')
+        return
+      }
+      
+      const profileData = {
+        id: userId,
+        email: user.email || '',
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || null,
+        university: null,
+        country: null,
+        whatsapp_number: null,
+        field_of_study: null,
+        academic_level: null,
+        level: null,
+        learning_domains: null,
+        onboarding_completed: false
+      }
+      
+      console.log('Inserting profile data:', profileData)
+      
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .insert(profileData)
+        .select()
+        .single()
+      
+      if (error) {
+        console.error('Error creating profile:', error)
+        console.error('Error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        })
+        throw error
+      } else {
+        console.log('Profile created successfully:', data)
+        setProfile(data)
+        return data
+      }
+    } catch (error) {
+      console.error('Error creating profile:', error)
+      throw error
+    }
+  }
+
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: 'No user logged in' }
 
+    console.log('Updating profile for user:', user.id)
+    console.log('Update data:', updates)
+
     try {
+      // First check if profile exists
+      const { data: existingProfile, error: fetchError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      if (fetchError && fetchError.code === 'PGRST116') {
+        // Profile doesn't exist, create it first
+        console.log('Profile not found, creating new profile...')
+        try {
+          await createProfile(user.id)
+          console.log('Profile created, proceeding with update...')
+        } catch (createError) {
+          console.error('Failed to create profile:', createError)
+          return { error: 'Failed to create user profile' }
+        }
+      } else if (fetchError) {
+        console.error('Error checking profile existence:', fetchError)
+        return { error: 'Failed to check profile existence' }
+      }
+
+      // Now update the profile
       const { data, error } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', user.id)
         .select()
@@ -109,9 +194,16 @@ export function useAuth() {
 
       if (error) {
         console.error('Error updating profile:', error)
+        console.error('Error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        })
         return { error: error.message }
       }
 
+      console.log('Profile updated successfully:', data)
       setProfile(data)
       return { data }
     } catch (error) {

@@ -14,14 +14,14 @@ export async function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname
   
   try {
-    // Vérifier la session utilisateur
-    const { data: { session }, error } = await supabase.auth.getSession()
+    // Vérifier l'authentification utilisateur avec getUser() pour plus de sécurité
+    const { data: { user }, error } = await supabase.auth.getUser()
     
     if (error) {
       console.error('Middleware auth error:', error)
     }
     
-    const isAuthenticated = !!session
+    const isAuthenticated = !!user
     const isProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route))
     const isAuthRoute = authRoutes.some(route => currentPath.startsWith(route))
     
@@ -29,9 +29,9 @@ export async function middleware(request: NextRequest) {
     if (isAuthenticated && isAuthRoute) {
       // Vérifier si l'onboarding est complété
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('onboarding_completed')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
       
       if (profile?.onboarding_completed) {
@@ -51,9 +51,9 @@ export async function middleware(request: NextRequest) {
     // Si utilisateur connecté et sur /onboarding mais onboarding déjà complété → redirect dashboard
     if (isAuthenticated && currentPath === '/onboarding') {
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('onboarding_completed')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
       
       if (profile?.onboarding_completed) {
@@ -63,14 +63,22 @@ export async function middleware(request: NextRequest) {
     
     // Si utilisateur connecté et sur /dashboard mais onboarding pas complété → redirect onboarding
     if (isAuthenticated && currentPath.startsWith('/dashboard')) {
+      // Check if we're already being redirected to prevent infinite loop
+      const redirectUrl = request.nextUrl.searchParams.get('redirect')
+      if (redirectUrl === '/onboarding') {
+        return supabaseResponse // Allow the request to proceed if we're already being redirected
+      }
+
       const { data: profile } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .select('onboarding_completed')
-        .eq('id', session.user.id)
+        .eq('id', user.id)
         .single()
       
       if (!profile?.onboarding_completed) {
-        return NextResponse.redirect(new URL('/onboarding', request.url))
+        const redirectUrl = new URL('/onboarding', request.url)
+        redirectUrl.searchParams.set('redirect', currentPath) // Add redirect parameter to prevent loop
+        return NextResponse.redirect(redirectUrl)
       }
     }
     
